@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="noir" data-accent="violet" data-motion="full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#08080b" />
+    <meta
+      name="description"
+      content="XORVYNE — Create Beyond Limits. An AI-powered video creation and editing studio for web and Android."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>XORVYNE — Create Beyond Limits</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong palette.
+      try {
+        const raw = localStorage.getItem('xorvyne.settings');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const state = parsed && parsed.state ? parsed.state : parsed;
+          const root = document.documentElement;
+          if (state.theme) root.dataset.theme = state.theme;
+          if (state.accent) root.dataset.accent = state.accent;
+          if (state.reduceMotion) root.dataset.motion = 'reduced';
+          if (state.language) {
+            root.lang = state.language;
+            root.dir = state.language === 'ar' ? 'rtl' : 'ltr';
+          }
+        }
+      } catch (error) {
+        /* ignore malformed storage */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>XORVYNE needs JavaScript to run the editor.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

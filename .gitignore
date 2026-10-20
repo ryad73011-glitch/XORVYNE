@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+.vite/
+*.log
+npm-debug.log*
+.DS_Store
+.env
+.env.local
+.env.*.local
+
+# Locally provisioned binaries (fetched with `npm run setup:ffmpeg`).
+# These are large platform-specific artifacts and are intentionally not committed.
+/vendor/ffmpeg/
+/vendor/fonts/
+/.tmp/
+/server/.tmp/
