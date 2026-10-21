@@ -1,0 +1,142 @@
+/* XORVYNE design tokens -------------------------------------------------- */
+
+:root {
+  --ease: cubic-bezier(0.22, 0.68, 0.28, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --dur-slow: 340ms;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Noto Sans Arabic', 'Helvetica Neue', sans-serif;
+  --font-display: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --nav-width: 248px;
+  --topbar-height: 60px;
+  --tabbar-height: 62px;
+  --max-width: 1240px;
+
+  --danger: #f43f5e;
+  --warning: #f59e0b;
+  --success: #34d399;
+  --info: #38bdf8;
+}
+
+/* Theme: noir (default) */
+[data-theme='noir'] {
+  --bg: #08080b;
+  --bg-gradient: radial-gradient(1200px 600px at 15% -10%, rgba(124, 58, 237, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 95% 0%, rgba(34, 211, 238, 0.08), transparent 55%);
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1d1d26;
+  --surface-hover: #22222c;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #f4f4f6;
+  --text-dim: #a7a7b4;
+  --text-mute: #6f6f7d;
+  --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+  --shadow-md: 0 14px 30px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Theme: ember */
+[data-theme='ember'] {
+  --bg: #0c0907;
+  --bg-gradient: radial-gradient(1100px 620px at 12% -12%, rgba(249, 115, 22, 0.18), transparent 60%),
+    radial-gradient(900px 520px at 96% 4%, rgba(244, 63, 94, 0.1), transparent 58%);
+  --surface: #14100d;
+  --surface-2: #1b1612;
+  --surface-3: #241d17;
+  --surface-hover: #2b221b;
+  --border: rgba(255, 236, 214, 0.09);
+  --border-strong: rgba(255, 236, 214, 0.18);
+  --text: #f6f1ec;
+  --text-dim: #b6a99c;
+  --text-mute: #7d7166;
+  --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+  --shadow-md: 0 14px 30px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Theme: frost */
+[data-theme='frost'] {
+  --bg: #070a0f;
+  --bg-gradient: radial-gradient(1100px 620px at 10% -10%, rgba(56, 189, 248, 0.16), transparent 60%),
+    radial-gradient(900px 520px at 96% 2%, rgba(129, 140, 248, 0.12), transparent 58%);
+  --surface: #0d1117;
+  --surface-2: #131a22;
+  --surface-3: #1a232d;
+  --surface-hover: #1f2a36;
+  --border: rgba(190, 220, 255, 0.1);
+  --border-strong: rgba(190, 220, 255, 0.2);
+  --text: #eef4fb;
+  --text-dim: #a3b3c4;
+  --text-mute: #6c7c8d;
+  --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+  --shadow-md: 0 14px 30px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Theme: void */
+[data-theme='void'] {
+  --bg: #000000;
+  --bg-gradient: radial-gradient(1000px 560px at 50% -20%, rgba(139, 92, 246, 0.18), transparent 62%);
+  --surface: #080808;
+  --surface-2: #0e0e10;
+  --surface-3: #151518;
+  --surface-hover: #1b1b1f;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text: #f5f5f7;
+  --text-dim: #9a9aa6;
+  --text-mute: #63636e;
+  --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 0.9);
+  --shadow-md: 0 14px 30px -12px rgba(0, 0, 0, 0.75);
+}
+
+/* Accents */
+[data-accent='violet'] {
+  --accent: #8b5cf6;
+  --accent-2: #a78bfa;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(139, 92, 246, 0.16);
+  --accent-glow: rgba(139, 92, 246, 0.38);
+}
+[data-accent='cyan'] {
+  --accent: #22d3ee;
+  --accent-2: #67e8f9;
+  --accent-ink: #04121a;
+  --accent-soft: rgba(34, 211, 238, 0.16);
+  --accent-glow: rgba(34, 211, 238, 0.34);
+}
+[data-accent='amber'] {
+  --accent: #f59e0b;
+  --accent-2: #fbbf24;
+  --accent-ink: #1a1002;
+  --accent-soft: rgba(245, 158, 11, 0.16);
+  --accent-glow: rgba(245, 158, 11, 0.32);
+}
+[data-accent='rose'] {
+  --accent: #f43f5e;
+  --accent-2: #fb7185;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(244, 63, 94, 0.16);
+  --accent-glow: rgba(244, 63, 94, 0.34);
+}
+
+[data-motion='reduced'] {
+  --dur-fast: 0ms;
+  --dur: 0ms;
+  --dur-slow: 0ms;
+}
