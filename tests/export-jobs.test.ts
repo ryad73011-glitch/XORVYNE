@@ -1,18 +1,14 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanupJobs, createJob, failJob, getJob } from '@server/export/jobs.js';
 
-const createdIds: string[] = [];
-
 afterEach(() => {
   // Jobs are in-memory and their temporary files are removed immediately after each test.
   cleanupJobs(0);
-  createdIds.length = 0;
 });
 
 describe('export job failure handling', () => {
   it('marks preparation errors as failed and exposes the message to polling clients', () => {
     const job = createJob();
-    createdIds.push(job.id);
 
     const failed = failJob(job.id, new Error('Invalid render plan'));
     expect(failed?.status).toBe('failed');
@@ -24,7 +20,6 @@ describe('export job failure handling', () => {
 
   it('handles non-Error values without leaving a job stuck', () => {
     const job = createJob();
-    createdIds.push(job.id);
 
     const failed = failJob(job.id, 'unexpected failure');
     expect(failed?.status).toBe('failed');
@@ -33,7 +28,6 @@ describe('export job failure handling', () => {
 
   it('does not overwrite an existing failure with a late error', () => {
     const job = createJob();
-    createdIds.push(job.id);
     // Failure handling should be idempotent once the job reaches a terminal state.
     const internal = failJob(job.id, new Error('first failure'));
     expect(internal?.status).toBe('failed');
