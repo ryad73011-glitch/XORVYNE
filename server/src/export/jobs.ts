@@ -201,9 +201,17 @@ export async function runJob(job: InternalJob, input: JobInput): Promise<void> {
     job.finishedAt = Date.now();
     job.realRender = true;
   } catch (error) {
-    job.status = 'failed';
-    job.errorMessage = error instanceof Error ? error.message : 'The render failed.';
-    job.message = 'Render failed';
+    if (job.cancelRequested) {
+      // An AbortController rejection is the expected outcome of a user cancellation,
+      // not a failed export. Keep the terminal status truthful for polling clients.
+      job.status = 'cancelled';
+      job.message = 'Cancelled.';
+      job.errorMessage = undefined;
+    } else {
+      job.status = 'failed';
+      job.errorMessage = error instanceof Error ? error.message : 'The render failed.';
+      job.message = 'Render failed';
+    }
     job.finishedAt = Date.now();
   } finally {
     clearInterval(abortWatcher);
