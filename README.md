@@ -14,7 +14,7 @@ npm run dev            # Vite web app :5173 + local API :8787
 
 Open `http://localhost:5173`. On Android, open the same reachable HTTPS/local-network URL in Chrome and choose **Add to Home screen**. The installable PWA shell and responsive layout are designed for phone screens. Projects and source media are local to each browser profile and do not sync between devices.
 
-The API server can run by itself with `npm run dev:server`. For a production build, use `npm run build` then `npm start`; the server serves the built client and API on `PORT` (default 8787).
+The API server can run by itself with `npm run dev:server`. It binds to `127.0.0.1` by default so the unauthenticated API is not exposed to the local network. For a trusted private LAN only, set `HOST=0.0.0.0` explicitly and configure your firewall; do not expose this server directly to the public internet. For a production build, use `npm run build` then `npm start`; the server serves the built client and API on `PORT` (default 8787).
 
 ## What's working
 
@@ -50,6 +50,7 @@ Copy `.env.example` to `.env` and configure only services you intend to use. Key
 - Imported media is held in browser IndexedDB; it is not uploaded during editing or preview.
 - Export uploads the selected project's local media to the same XORVYNE server for rendering, then retains the server-side temporary files only for the configured short retention window.
 - Provider credentials live in server environment variables only. Do not put keys in `VITE_*` variables.
+- The API binds to localhost by default. LAN exposure is opt-in because the local API does not currently implement user authentication.
 - Uploaded media types and size are validated; export filenames are sanitised; temporary directories are isolated per job.
 - Local project data has no cloud backup. Browser storage can be cleared by the user or browser, so export important work.
 
