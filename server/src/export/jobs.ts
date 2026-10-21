@@ -105,11 +105,7 @@ export async function runJob(job: InternalJob, input: JobInput): Promise<void> {
   job.status = 'preparing';
   job.message = 'Preparing the render…';
 
-  const mediaByAsset = new Map<string, UploadedMedia>();
-  for (const entry of input.media) {
-    const upload = getUpload(entry.token);
-    if (upload) mediaByAsset.set(entry.assetId, upload);
-  }
+  const mediaByAsset = resolveMediaByAsset(input.media);
 
   const fontFile = findTextFont();
   const plan = buildPlan({
@@ -231,3 +227,16 @@ export function cleanupJobs(maxAgeMs: number): number {
 }
 
 export const jobRetentionMs = config.jobRetentionMs;
+
+/** Resolves client asset references before planning; stale tokens must not silently drop clips. */
+export function resolveMediaByAsset(entries: { assetId: string; token: string }[]): Map<string, UploadedMedia> {
+  const mediaByAsset = new Map<string, UploadedMedia>();
+  for (const entry of entries) {
+    const upload = getUpload(entry.token);
+    if (!upload) {
+      throw new Error('One or more uploaded media files are no longer available. Upload the missing media again and retry the export.');
+    }
+    mediaByAsset.set(entry.assetId, upload);
+  }
+  return mediaByAsset;
+}
