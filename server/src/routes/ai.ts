@@ -1,34 +1,10 @@
 import { Router } from 'express';
-import { z } from 'zod';
+import { commandSchema, editSchema, imageToVideoSchema, textToVideoSchema } from './ai-schemas.js';
 import type { CommandRequest } from '@shared/types.js';
 import { resolveProviders } from '../providers/registry.js';
 import { getUpload } from '../export/media.js';
 
 export const aiRouter = Router();
-
-const commandSchema = z.object({
-  message: z.string().min(1).max(2000),
-  project: z.object({
-    id: z.string(),
-    name: z.string(),
-    settings: z.object({
-      width: z.number(),
-      height: z.number(),
-      fps: z.number(),
-      backgroundColor: z.string(),
-      sampleRate: z.number(),
-      gridMs: z.number(),
-      snapToGrid: z.boolean(),
-      zoom: z.number(),
-      autoSave: z.boolean(),
-    }),
-    tracks: z.array(z.any()),
-    clips: z.array(z.any()),
-    assets: z.array(z.any()),
-    selectedClipId: z.string().nullish(),
-  }),
-  conversation: z.array(z.any()).optional(),
-});
 
 aiRouter.post('/ai/command', async (request, response) => {
   const parsed = commandSchema.safeParse(request.body);
@@ -47,12 +23,6 @@ aiRouter.post('/ai/command', async (request, response) => {
   }
 });
 
-const textToVideoSchema = z.object({
-  prompt: z.string().min(3).max(2000),
-  style: z.string().optional(),
-  durationMs: z.number().min(5000).max(300000).optional(),
-});
-
 aiRouter.post('/ai/text-to-video', async (request, response) => {
   const parsed = textToVideoSchema.safeParse(request.body);
   if (!parsed.success) {
@@ -69,12 +39,6 @@ aiRouter.post('/ai/text-to-video', async (request, response) => {
   }
 });
 
-const imageToVideoSchema = z.object({
-  prompt: z.string().min(3).max(2000),
-  motion: z.string().optional(),
-  durationMs: z.number().optional(),
-});
-
 aiRouter.post('/ai/image-to-video', async (request, response) => {
   const parsed = imageToVideoSchema.safeParse(request.body);
   if (!parsed.success) {
@@ -89,12 +53,6 @@ aiRouter.post('/ai/image-to-video', async (request, response) => {
       error: error instanceof Error ? error.message : 'The image-to-video provider failed.',
     });
   }
-});
-
-const editSchema = z.object({
-  prompt: z.string().max(2000).optional(),
-  uploadToken: z.string().optional(),
-  fileName: z.string().optional(),
 });
 
 aiRouter.post('/ai/edit-existing', async (request, response) => {
