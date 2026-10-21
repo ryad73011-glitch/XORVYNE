@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanupJobs, createJob, failJob, getJob, resolveMediaByAsset } from '@server/export/jobs.js';
+import { cancelJob, cleanupJobs, createJob, failJob, getJob, resolveMediaByAsset } from '@server/export/jobs.js';
 
 afterEach(() => {
   // Jobs are in-memory and their temporary files are removed immediately after each test.
@@ -7,6 +7,15 @@ afterEach(() => {
 });
 
 describe('export job failure handling', () => {
+  it('marks a queued export as cancelled without reporting a failure', () => {
+    const job = createJob();
+    const cancelled = cancelJob(job.id);
+    expect(cancelled?.status).toBe('cancelled');
+    expect(cancelled?.message).toBe('Cancelled.');
+    expect(cancelled?.errorMessage).toBeUndefined();
+    expect(getJob(job.id)?.status).toBe('cancelled');
+  });
+
   it('marks preparation errors as failed and exposes the message to polling clients', () => {
     const job = createJob();
 
