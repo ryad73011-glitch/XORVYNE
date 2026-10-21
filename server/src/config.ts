@@ -43,7 +43,8 @@ function env(name: string): string | undefined {
 
 export const config: ServerConfig = {
   port: Number(env('PORT') ?? 8787),
-  host: env('HOST') ?? '0.0.0.0',
+  // Bind locally by default; exposing the unauthenticated API to a LAN must be an explicit choice.
+  host: env('HOST') ?? '127.0.0.1',
   tempDir: path.resolve(env('XORVYNE_TEMP_DIR') ?? path.join(process.cwd(), '.tmp')),
   publicDir: path.resolve(env('XORVYNE_PUBLIC_DIR') ?? path.join(process.cwd(), 'dist', 'client')),
   maxUploadBytes: Number(env('XORVYNE_MAX_UPLOAD_BYTES') ?? 200 * 1024 * 1024),
