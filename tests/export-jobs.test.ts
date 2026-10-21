@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanupJobs, createJob, failJob, getJob } from '@server/export/jobs.js';
+import { cleanupJobs, createJob, failJob, getJob, resolveMediaByAsset } from '@server/export/jobs.js';
 
 afterEach(() => {
   // Jobs are in-memory and their temporary files are removed immediately after each test.
@@ -34,5 +34,17 @@ describe('export job failure handling', () => {
     const repeated = failJob(job.id, new Error('late failure'));
     expect(repeated?.status).toBe('failed');
     expect(repeated?.errorMessage).toBe('first failure');
+  });
+});
+
+
+describe('export media reference validation', () => {
+  it('rejects stale upload tokens instead of silently omitting media from the render', () => {
+    expect(() => resolveMediaByAsset([{ assetId: 'asset-1', token: 'missing-upload-token' }]))
+      .toThrow('media files are no longer available');
+  });
+
+  it('accepts an empty media list for projects that only contain generated text or blank frames', () => {
+    expect(resolveMediaByAsset([]).size).toBe(0);
   });
 });
