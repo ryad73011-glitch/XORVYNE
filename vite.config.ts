@@ -14,8 +14,9 @@ export default defineConfig({
     },
   },
   server: {
+    // Bind on LAN so a phone can open the dev UI; keep Vite's host-header
+    // allowlist enabled to avoid DNS-rebinding exposure from arbitrary domains.
     host: '0.0.0.0',
-    allowedHosts: true,
     port: Number(process.env.XORVYNE_CLIENT_PORT ?? 5173),
     strictPort: false,
     proxy: {
