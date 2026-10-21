@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import fs from 'node:fs';
 import { z } from 'zod';
-import { cancelJob, createJob, getJob, jobFilePath, runJob, toPublic } from '../export/jobs.js';
+import { cancelJob, createJob, failJob, getJob, jobFilePath, runJob, toPublic } from '../export/jobs.js';
 import { getUpload } from '../export/media.js';
 
 export const exportRouter = Router();
@@ -121,8 +121,7 @@ exportRouter.post('/export/jobs', (request, response) => {
     settings: parsed.data.settings,
     media: parsed.data.media,
   }).catch((error: unknown) => {
-    const current = getJob(job.id);
-    void current;
+    failJob(job.id, error);
     console.error('[export] job failed', error);
   });
 });
