@@ -105,7 +105,11 @@ export async function runJob(job: InternalJob, input: JobInput): Promise<void> {
   job.status = 'preparing';
   job.message = 'Preparing the render…';
 
-  const mediaByAsset = resolveMediaByAsset(input.media);
+  const requiredAssetIds = new Set(input.project.clips
+    .filter((clip) => clip.kind === 'video' || clip.kind === 'image' || clip.kind === 'audio')
+    .map((clip) => clip.assetId)
+    .filter((assetId): assetId is string => Boolean(assetId)));
+  const mediaByAsset = resolveMediaByAsset(input.media, requiredAssetIds);
 
   const fontFile = findTextFont();
   const plan = buildPlan({
@@ -229,12 +233,18 @@ export function cleanupJobs(maxAgeMs: number): number {
 export const jobRetentionMs = config.jobRetentionMs;
 
 /** Resolves client asset references before planning; stale tokens must not silently drop clips. */
-export function resolveMediaByAsset(entries: { assetId: string; token: string }[]): Map<string, UploadedMedia> {
+export function resolveMediaByAsset(
+  entries: { assetId: string; token: string }[],
+  requiredAssetIds: ReadonlySet<string> = new Set(entries.map((entry) => entry.assetId)),
+): Map<string, UploadedMedia> {
   const mediaByAsset = new Map<string, UploadedMedia>();
   for (const entry of entries) {
     const upload = getUpload(entry.token);
     if (!upload) {
-      throw new Error('One or more uploaded media files are no longer available. Upload the missing media again and retry the export.');
+      if (requiredAssetIds.has(entry.assetId)) {
+        throw new Error('One or more uploaded media files are no longer available. Upload the missing media again and retry the export.');
+      }
+      continue;
     }
     mediaByAsset.set(entry.assetId, upload);
   }
