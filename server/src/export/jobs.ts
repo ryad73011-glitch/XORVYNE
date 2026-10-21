@@ -74,7 +74,7 @@ export function cancelJob(id: string): ExportJob | undefined {
 /** Marks failures that happen before the encoder starts (for example, an invalid render plan). */
 export function failJob(id: string, error: unknown): ExportJob | undefined {
   const job = jobs.get(id);
-  if (!job || job.status === 'complete' || job.status === 'cancelled') return job ? toPublic(job) : undefined;
+  if (!job || job.status === 'complete' || job.status === 'cancelled' || job.status === 'failed') return job ? toPublic(job) : undefined;
   const message = error instanceof Error ? error.message : 'The export could not be prepared.';
   job.status = 'failed';
   job.errorMessage = message;
