@@ -31,10 +31,10 @@ describe('export job failure handling', () => {
     expect(failed?.errorMessage).toBe('The export could not be prepared.');
   });
 
-  it('does not overwrite a completed job with a late failure', () => {
+  it('does not overwrite an existing failure with a late error', () => {
     const job = createJob();
     createdIds.push(job.id);
-    // A failure handler should be idempotent and never downgrade terminal success.
+    // Failure handling should be idempotent once the job reaches a terminal state.
     const internal = failJob(job.id, new Error('first failure'));
     expect(internal?.status).toBe('failed');
     const repeated = failJob(job.id, new Error('late failure'));
