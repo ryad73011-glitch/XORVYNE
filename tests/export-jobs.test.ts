@@ -47,4 +47,8 @@ describe('export media reference validation', () => {
   it('accepts an empty media list for projects that only contain generated text or blank frames', () => {
     expect(resolveMediaByAsset([]).size).toBe(0);
   });
+
+  it('does not fail for a stale upload that is not referenced by any export clip', () => {
+    expect(resolveMediaByAsset([{ assetId: 'unused-asset', token: 'expired-token' }], new Set()).size).toBe(0);
+  });
 });
